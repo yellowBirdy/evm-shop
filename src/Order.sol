@@ -4,10 +4,7 @@ pragma solidity 0.8.13;
 using OrderLib for Order global;
 
 
-
-
 error InvalidTransition(OrderStatus from, OrderStatus to);
-
 
 
 enum OrderStatus {
@@ -42,28 +39,24 @@ library OrderLib {
         _;
     }
 
-    function update(Order memory order, OrderStatus newStatus) public onlyValidTransition(order.status, newStatus) {
-
+    function update(Order storage order, OrderStatus newStatus) internal  onlyValidTransition(order.status, newStatus) {
+        order.status = newStatus;
     }
 
 }
 
 
 function isTransitionValid(OrderStatus from, OrderStatus to) pure returns(bool) {
-    //TODO
-    // placed -> processing
-    // placed -> cancelled
-    // placed -> invalid
-    // processing -> fullfiled
-    // processing -> failed
-
+    if (from == OrderStatus.placed) {
+        // placed -> processing || cancelled || invalid
+        if (to == OrderStatus.processing || to == OrderStatus.processing || to == OrderStatus.processing)
+            return true;
+    }
+    if (from == OrderStatus.placed) {
+        // processing -> fullfiled || failed
+        if (to == OrderStatus.fullfiled || to == OrderStatus.failed)
+            return true;
+    }
     return false;
 }
 
-
-    // placed,
-    // processing,
-    // fullfiled,
-    // failed,
-    // cancelled,
-    // invalid
