@@ -73,17 +73,20 @@ contract Shop is IShop {
     function updateOrder(uint256 id, OrderStatus newStatus) external {
         Order storage order = orders[id];
         if (!isAdminOrBuyer(order.buyer)) revert Unauthorized(msg.sender);
+        // BUYER CAN ONLY CANCEL
+        if (msg.sender == order.buyer && newStatus != OrderStatus.cancelled) revert Unauthorized(msg.sender);
 
         order.update(newStatus);
     }
 
     // INTERNALS
 
+
   
     // HELPERS
 
-    function isAdminOrBuyer(address creator) internal view returns(bool) {
-        return msg.sender == owner || msg.sender == creator;
+    function isAdminOrBuyer(address buyer) internal view returns(bool) {
+        return msg.sender == owner || msg.sender == buyer;
     }
     
     function _productExists(uint256 id) public view returns(bool) {

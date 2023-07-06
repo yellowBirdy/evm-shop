@@ -10,7 +10,7 @@ error InvalidTransition(OrderStatus from, OrderStatus to);
 enum OrderStatus {
     placed,
     processing,
-    fullfiled,
+    fullfilled,
     failed,
     cancelled,
     invalid
@@ -49,12 +49,12 @@ library OrderLib {
 function isTransitionValid(OrderStatus from, OrderStatus to) pure returns(bool) {
     if (from == OrderStatus.placed) {
         // placed -> processing || cancelled || invalid
-        if (to == OrderStatus.processing || to == OrderStatus.processing || to == OrderStatus.processing)
+        if (to == OrderStatus.processing || to == OrderStatus.cancelled || to == OrderStatus.invalid)
             return true;
     }
-    if (from == OrderStatus.placed) {
-        // processing -> fullfiled || failed
-        if (to == OrderStatus.fullfiled || to == OrderStatus.failed)
+    if (from == OrderStatus.processing) {
+        // processing -> fullfilled || failed
+        if (to == OrderStatus.fullfilled || to == OrderStatus.failed)
             return true;
     }
     return false;
