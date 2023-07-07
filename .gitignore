@@ -21,6 +21,6 @@ node_modules/
 #Hardhat files
 cache
 artifacts
-
+cache_hardhat
 
 .DS_Store
