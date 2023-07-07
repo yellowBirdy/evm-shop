@@ -24,8 +24,8 @@ goerli = "https://eth-goerli.g.alchemy.com/v2/${GOERLI_API_KEY}"
 
 
 [etherscan]
-mainnet = { key = "${ETHERSCAN_MAINNET_KEY}" }
-goerli = { key = "${ETHERSCAN_MAINNET_KEY}" }
+mainnet = { key = "${ETHERSCAN_DEFAULT_KEY}" }
+goerli = { key = "${ETHERSCAN_DEFAULT_KEY}" }
 
 
 
