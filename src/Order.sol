@@ -6,7 +6,7 @@ using OrderLib for Order global;
 
 error InvalidTransition(OrderStatus from, OrderStatus to);
 
-
+// @dev enum listing possible values of order status
 enum OrderStatus {
     placed,
     processing,
@@ -16,6 +16,7 @@ enum OrderStatus {
     invalid
 }
 
+// @dev provisionaly describes a product
 struct Product {
     string name;
     string category;
@@ -28,24 +29,38 @@ struct Order {
     uint80 quantity;
     OrderStatus status;
     uint256 pricePayed;
-    // deliveryType
-    // ...
 }
 
 library OrderLib {
-
-    modifier onlyValidTransition(OrderStatus oldStatus, OrderStatus newStatus) {
-        if (!isTransitionValid(oldStatus, newStatus)) revert InvalidTransition(oldStatus, newStatus);
+    /**
+    * @dev modifier validating correctness of requested OrderStatus transition
+    * @param from initial status
+    * @param to requested final status
+    */
+    modifier onlyValidTransition(OrderStatus from, OrderStatus to) {
+        if (!isTransitionValid(from, to)) revert InvalidTransition(from, to);
         _;
     }
 
+    /**
+     * @notice will only allow for valid changes defined in isTransitionValid
+     * @notice operates on storage orders only 
+     * @dev changes status of an order
+     * @param order reference to the storage order to be modified
+     * @param newStatus requested final status
+     */
     function update(Order storage order, OrderStatus newStatus) internal  onlyValidTransition(order.status, newStatus) {
         order.status = newStatus;
     }
 
 }
 
-
+/**
+* @dev defines valid order status changes 
+    * @param from initial status
+    * @param to requested final status
+* @return boolean representing validity of requested change
+*/
 function isTransitionValid(OrderStatus from, OrderStatus to) pure returns(bool) {
     if (from == OrderStatus.placed) {
         // placed -> processing || cancelled || invalid
