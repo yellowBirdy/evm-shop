@@ -98,7 +98,7 @@ contract Shop is IShop, Ownable2Step{
     * @notice will revert if called by unauthorized account
     * @notice will revert if invalid status update requested
     * @param id  id of the order 
-    * @parm newStatus desired value of the status
+    * @param newStatus desired value of the status
     */
     function updateOrder(uint256 id, OrderStatus newStatus) external {
         Order storage order = orders[id];
